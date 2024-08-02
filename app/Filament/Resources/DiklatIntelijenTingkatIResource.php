@@ -2,38 +2,28 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Exports\DiklatIntelijenTingkatDasarExporter;
-use App\Filament\Resources\DiklatIntelijenTingkatDasarResource\Pages;
-use App\Filament\Resources\DiklatIntelijenTingkatDasarResource\RelationManagers;
-use App\Models\DiklatIntelijenTingkatDasar;
-use App\Models\PesertaPelatihan;
-use Faker\Provider\ar_EG\Text;
-use Filament\Actions\CreateAction;
+use App\Filament\Resources\DiklatIntelijenTingkatIResource\Pages;
+use App\Filament\Resources\DiklatIntelijenTingkatIResource\RelationManagers;
+use App\Models\DiklatIntelijenTingkatI;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\Component;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Request;
-use Filament\Infolists\Infolist;
-use Filament\Tables\Actions\ExportAction;
-use Filament\Tables\Columns\BadgeColumn;
 
-class DiklatIntelijenTingkatDasarResource extends Resource
+class DiklatIntelijenTingkatIResource extends Resource
 {
-    protected static ?string $model = DiklatIntelijenTingkatDasar::class;
-    protected static ?string $navigationLabel = 'Diklat Intelijen Tingkat Dasar';
+    protected static ?string $model = DiklatIntelijenTingkatI::class;
+
+    protected static ?string $navigationLabel = 'Diklat Intelijen Tingkat I';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -88,7 +78,7 @@ class DiklatIntelijenTingkatDasarResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama')->label('Nama')->required(),
-                TextInput::make('kode_pelatihan')->label('Kode Pelatihan')->default('diklat_intelijen_tingkat_dasar')->readOnly(),
+                TextInput::make('kode_pelatihan')->label('Kode Pelatihan')->default('diklat_intelijen_tingkat_i')->readOnly(),
                 DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->date()->required(),
                 TextInput::make('nip')->label('NIP')->numeric()->required(),
                 Select::make('pangkat')->label('Pangkat')->required()
@@ -123,36 +113,22 @@ class DiklatIntelijenTingkatDasarResource extends Resource
                         'preview',
                         'strike',
                     ]),
-                    TextInput::make('keterangan_2')->label('Keterangan 2')
-                    ->default('-')->readOnly(),
+
+
             ]);
     }
 
     public static function table(Table $table): Table
     {
-        $notSyaratGolongan =[
-            'II/b',
-            'II/a',
-            'I/d',
-            'I/c',
-            'I/b',
-            'I/a',
-        ];
         return $table
-            ->headerActions([
-                ExportAction::make()
-                    ->exporter(DiklatIntelijenTingkatDasarExporter::class)
-            ])
             ->query(
-                DiklatIntelijenTingkatDasar::query()
-                ->where('kode_pelatihan', 'diklat_intelijen_tingkat_dasar')
+                DiklatIntelijenTingkatI::query()
+                ->where('kode_pelatihan', 'diklat_intelijen_tingkat_i')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama'),
                 Tables\Columns\TextColumn::make('nip')->label('NIP'),
-                Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir')
-                ->dateTime('d-m-Y'),
-
+                Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir'),
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
                 Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Status Riwayat Diklat'),
                 Tables\Columns\TextColumn::make('riwayat_diklat')->label('Riwayat Diklat'),
@@ -165,7 +141,7 @@ class DiklatIntelijenTingkatDasarResource extends Resource
                 Tables\Columns\TextColumn::make('keterangan')->label('Keterangan'),
                 BadgeColumn::make('keterangan_2')
                     ->label('Keterangan 2')
-                    ->formatStateUsing(function (DiklatIntelijenTingkatDasar $record) {
+                    ->formatStateUsing(function (DiklatIntelijenTingkatI $record) {
 
                         $riwayatDiklat = $record->riwayat_diklat == 'Tidak' ? 'Tidak' : 'Ya';
                         $umur = $record->age;
@@ -199,7 +175,6 @@ class DiklatIntelijenTingkatDasarResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
@@ -209,19 +184,10 @@ class DiklatIntelijenTingkatDasarResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDiklatIntelijenTingkatDasars::route('/'),
-            'create' => Pages\CreateDiklatIntelijenTingkatDasar::route('/create'),
-            'edit' => Pages\EditDiklatIntelijenTingkatDasar::route('/{record}/edit'),
+            'index' => Pages\ManageDiklatIntelijenTingkatIS::route('/'),
         ];
     }
 }

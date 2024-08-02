@@ -16,6 +16,15 @@ class HasilDiklatIntelijenTingkatDasarWidget extends BaseWidget
     protected $label = 'Ranking Diklat Intelijen Tingkat Dasar';
     public function table(Table $table): Table
     {
+
+        $notSyaratGolongan =[
+            'II/b',
+            'II/a',
+            'I/d',
+            'I/c',
+            'I/b',
+            'I/a',
+        ];
         return $table
         ->headerActions([
             ExportAction::make()
@@ -25,8 +34,8 @@ class HasilDiklatIntelijenTingkatDasarWidget extends BaseWidget
                 DiklatIntelijenTingkatDasar::query()
                 ->where('kode_pelatihan', 'diklat_intelijen_tingkat_dasar')
                 ->where('status_riwayat_diklat', 'Tidak')
+                ->whereNotIn('golongan', $notSyaratGolongan)
                 ->whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) <= 35')
-                
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama')->searchable(),
