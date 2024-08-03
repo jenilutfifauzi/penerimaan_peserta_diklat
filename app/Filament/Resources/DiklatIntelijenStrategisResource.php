@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Exports\DiklatIntelijenTingkatIExporter;
-use App\Filament\Resources\DiklatIntelijenTingkatIResource\Pages;
-use App\Filament\Resources\DiklatIntelijenTingkatIResource\RelationManagers;
-use App\Models\DiklatIntelijenTingkatI;
+use App\Filament\Resources\DiklatIntelijenStrategisResource\Pages;
+use App\Filament\Resources\DiklatIntelijenStrategisResource\RelationManagers;
+use App\Models\DiklatIntelijenStrategis;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
@@ -20,13 +19,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class DiklatIntelijenTingkatIResource extends Resource
+class DiklatIntelijenStrategisResource extends Resource
 {
-    protected static ?string $model = DiklatIntelijenTingkatI::class;
-
-    protected static ?string $navigationLabel = 'Diklat Intelijen Tingkat I';
+    protected static ?string $model = DiklatIntelijenStrategis::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {
@@ -80,7 +79,7 @@ class DiklatIntelijenTingkatIResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama')->label('Nama')->required(),
-                TextInput::make('kode_pelatihan')->label('Kode Pelatihan')->default('diklat_intelijen_tingkat_i')->readOnly(),
+                TextInput::make('kode_pelatihan')->label('Kode Pelatihan')->default('diklat_intelijen_strategis')->readOnly(),
                 DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->date()->required(),
                 TextInput::make('nip')->label('NIP')->numeric()->required(),
                 Select::make('pangkat')->label('Pangkat')->required()
@@ -92,7 +91,7 @@ class DiklatIntelijenTingkatIResource extends Resource
                 TextInput::make('unit')->label('Unit')->required(),
                 TextInput::make('surat')->label('No Surat')->required(),
                 DatePicker::make('tanggal_surat')->label('Tanggal Surat')->required(),
-                Select::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat Dasar')->required()
+                Select::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat II')->required()
                     ->options([
                         'Ya' => 'Ya',
                         'Tidak' => 'Tidak',
@@ -125,18 +124,18 @@ class DiklatIntelijenTingkatIResource extends Resource
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(DiklatIntelijenTingkatIExporter::class)
+                ->exporter(DiklatIntelijenStrategis::class)
         ])
             ->query(
-                DiklatIntelijenTingkatI::query()
-                ->where('kode_pelatihan', 'diklat_intelijen_tingkat_i')
+                DiklatIntelijenStrategis::query()
+                ->where('kode_pelatihan', 'diklat_intelijen_strategis')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama'),
                 Tables\Columns\TextColumn::make('nip')->label('NIP'),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir'),
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
-                Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat Dasar'),
+                Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat II'),
                 Tables\Columns\TextColumn::make('riwayat_diklat')->label('Riwayat Diklat'),
                 Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('golongan')->label('Golongan'),
@@ -147,13 +146,17 @@ class DiklatIntelijenTingkatIResource extends Resource
                 Tables\Columns\TextColumn::make('keterangan')->label('Keterangan'),
                 BadgeColumn::make('keterangan_2')
                     ->label('Keterangan 2')
-                    ->formatStateUsing(function (DiklatIntelijenTingkatI $record) {
+                    ->formatStateUsing(function (DiklatIntelijenStrategis $record) {
 
                         $riwayatDiklat = $record->status_riwayat_diklat;
                         $umur = $record->age;
                         $golongan = $record->golongan;
                         $alasan = [];
                         $notSyaratGolongan =[
+                            'III/d',
+                            'III/c',
+                            'III/b',
+                            'III/a',
                             'II/d',
                             'II/c',
                             'II/b',
@@ -163,19 +166,17 @@ class DiklatIntelijenTingkatIResource extends Resource
                             'I/b',
                             'I/a',
                         ];
-                        if ($riwayatDiklat == 'Ya' && $umur <= 40 && !in_array($golongan, $notSyaratGolongan)) {
+                        if ($riwayatDiklat == 'Ya' && !in_array($golongan, $notSyaratGolongan)) {
                             $alasan = [];
                             $status = 'MS';
                             $alasans = '';
                         } else {
                             if ($riwayatDiklat != 'Ya') {
-                                $alasan[] = 'Tidak Lulus Diklat Intelijen Tingkat Dasar';
+                                $alasan[] = 'Tidak Lulus Diklat Intelijen Tingkat II';
                             }
-                            if ($umur > 40) {
-                                $alasan[] = 'Umur lebih dari 40';
-                            }
+            
                             if (in_array($golongan, $notSyaratGolongan)) {
-                                $alasan[] = 'Golongan dibawah Golongan III/a ';
+                                $alasan[] = 'Golongan dibawah Golongan IV/c ';
                             }
                             $alasans = implode(', ', $alasan);
                             $status = 'TM';
@@ -204,7 +205,7 @@ class DiklatIntelijenTingkatIResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageDiklatIntelijenTingkatIS::route('/'),
+            'index' => Pages\ManageDiklatIntelijenStrategis::route('/'),
         ];
     }
 }
