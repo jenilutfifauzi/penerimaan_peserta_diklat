@@ -11,4 +11,9 @@ class DiklatIntelijenTingkatI extends Model
 
     protected $table = 'peserta_pelatihans';
     protected $guarded = [];
+
+    public function getAgeAttribute()
+    {
+        return \Carbon\Carbon::parse($this->tanggal_lahir)->age;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\DiklatIntelijenTingkatIResource\Pages;
 
 use App\Filament\Resources\DiklatIntelijenTingkatIResource;
+use App\Filament\Widgets\HasilDiklatIntelijenTingkatIWidget;
 use Filament\Actions;
 use Filament\Resources\Pages\ManageRecords;
 
@@ -15,5 +16,13 @@ class ManageDiklatIntelijenTingkatIS extends ManageRecords
         return [
             Actions\CreateAction::make(),
         ];
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            HasilDiklatIntelijenTingkatIWidget::make(),
+        ];
+        
     }
 }

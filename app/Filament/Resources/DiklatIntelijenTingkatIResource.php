@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\DiklatIntelijenTingkatIExporter;
 use App\Filament\Resources\DiklatIntelijenTingkatIResource\Pages;
 use App\Filament\Resources\DiklatIntelijenTingkatIResource\RelationManagers;
 use App\Models\DiklatIntelijenTingkatI;
@@ -13,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -90,7 +92,7 @@ class DiklatIntelijenTingkatIResource extends Resource
                 TextInput::make('unit')->label('Unit')->required(),
                 TextInput::make('surat')->label('No Surat')->required(),
                 DatePicker::make('tanggal_surat')->label('Tanggal Surat')->required(),
-                Select::make('status_riwayat_diklat')->label('Riwayat Diklat')->required()
+                Select::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat Dasar')->required()
                     ->options([
                         'Ya' => 'Ya',
                         'Tidak' => 'Tidak',
@@ -121,6 +123,10 @@ class DiklatIntelijenTingkatIResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        ->headerActions([
+            ExportAction::make()
+                ->exporter(DiklatIntelijenTingkatIExporter::class)
+        ])
             ->query(
                 DiklatIntelijenTingkatI::query()
                 ->where('kode_pelatihan', 'diklat_intelijen_tingkat_i')
@@ -130,7 +136,7 @@ class DiklatIntelijenTingkatIResource extends Resource
                 Tables\Columns\TextColumn::make('nip')->label('NIP'),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir'),
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
-                Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Status Riwayat Diklat'),
+                Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat Dasar'),
                 Tables\Columns\TextColumn::make('riwayat_diklat')->label('Riwayat Diklat'),
                 Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('golongan')->label('Golongan'),
@@ -143,27 +149,38 @@ class DiklatIntelijenTingkatIResource extends Resource
                     ->label('Keterangan 2')
                     ->formatStateUsing(function (DiklatIntelijenTingkatI $record) {
 
-                        $riwayatDiklat = $record->riwayat_diklat == 'Tidak' ? 'Tidak' : 'Ya';
+                        $riwayatDiklat = $record->status_riwayat_diklat;
                         $umur = $record->age;
                         $golongan = $record->golongan;
                         $alasan = [];
-
-                        if ($riwayatDiklat == 'Tidak' && $umur <= 35 && !in_array($golongan, ['II/b', 'II/a', 'I/d', 'I/c', 'I/b', 'I/a'])) {
+                        $notSyaratGolongan =[
+                            'II/d',
+                            'II/c',
+                            'II/b',
+                            'II/a',
+                            'I/d',
+                            'I/c',
+                            'I/b',
+                            'I/a',
+                        ];
+                        if ($riwayatDiklat == 'Ya' && $umur <= 40 && !in_array($golongan, $notSyaratGolongan)) {
                             $alasan = [];
+                            $status = 'MS';
+                            $alasans = '';
                         } else {
-                            if ($riwayatDiklat != 'Tidak') {
-                                $alasan[] = 'Riwayat Diklat';
+                            if ($riwayatDiklat != 'Ya') {
+                                $alasan[] = 'Tidak Lulus Diklat Intelijen Tingkat Dasar';
                             }
-                            if ($umur > 35) {
-                                $alasan[] = 'Umur lebih dari 35';
+                            if ($umur > 40) {
+                                $alasan[] = 'Umur lebih dari 40';
                             }
                             if (in_array($golongan, ['II/b', 'II/a', 'I/d', 'I/c', 'I/b', 'I/a'])) {
-                                $alasan[] = 'Golongan dibawah Golongan II/c';
+                                $alasan[] = 'Golongan dibawah Golongan III/a ';
                             }
                             $alasans = implode(', ', $alasan);
+                            $status = 'TM';
                         }
-
-                        return $record->status_riwayat_diklat == 'Tidak' ? 'MS' : 'TM' . ' - ' . $alasans;
+                        return $status . ' - ' . $alasans;
                     })
                     ->colors([
                         'success' => 'MS',
