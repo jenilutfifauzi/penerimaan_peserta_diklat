@@ -167,13 +167,15 @@ class DiklatIntelijenTingkatDasarResource extends Resource
                     ->label('Keterangan 2')
                     ->formatStateUsing(function (DiklatIntelijenTingkatDasar $record) {
 
-                        $riwayatDiklat = $record->riwayat_diklat == 'Tidak' ? 'Tidak' : 'Ya';
+                        $riwayatDiklat = $record->status_riwayat_diklat == 'Tidak' ? 'Tidak' : 'Ya';
                         $umur = $record->age;
                         $golongan = $record->golongan;
                         $alasan = [];
 
                         if ($riwayatDiklat == 'Tidak' && $umur <= 35 && !in_array($golongan, ['II/b', 'II/a', 'I/d', 'I/c', 'I/b', 'I/a'])) {
                             $alasan = [];
+                            $status = 'MS';
+                            $alasans = '';
                         } else {
                             if ($riwayatDiklat != 'Tidak') {
                                 $alasan[] = 'Riwayat Diklat';
@@ -185,9 +187,10 @@ class DiklatIntelijenTingkatDasarResource extends Resource
                                 $alasan[] = 'Golongan dibawah Golongan II/c';
                             }
                             $alasans = implode(', ', $alasan);
+                            $status = 'TM';
                         }
 
-                        return $record->status_riwayat_diklat == 'Tidak' ? 'MS' : 'TM' . ' - ' . $alasans;
+                        return $status . ' - ' . $alasans;
                     })
                     ->colors([
                         'success' => 'MS',
