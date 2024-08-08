@@ -39,7 +39,9 @@ class HasilDiklatIntelijenStrategisWidget extends BaseWidget
                 DiklatIntelijenStrategis::query()
                     ->where('kode_pelatihan', 'diklat_intelijen_strategis')
                     ->where('status_riwayat_diklat', 'Ya')
+                    ->where('status_riwayat_diklat_dua_lulus', 'YA')
                     ->whereNotIn('golongan', $notSyaratGolongan)
+                    ->whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) <= 50')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama')->searchable(),

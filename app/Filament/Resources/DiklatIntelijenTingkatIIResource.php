@@ -94,7 +94,12 @@ class DiklatIntelijenTingkatIIResource extends Resource
                 TextInput::make('unit')->label('Unit')->required(),
                 TextInput::make('surat')->label('No Surat')->required(),
                 DatePicker::make('tanggal_surat')->label('Tanggal Surat')->required(),
-                Select::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat Dasar I')->required()
+                Select::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat I')->required()
+                    ->options([
+                        'Ya' => 'Ya',
+                        'Tidak' => 'Tidak',
+                    ]),
+                Select::make('status_riwayat_diklat_dua_lulus')->label('Lulus Dua Diklat Teknis Intelijen I')->required()
                     ->options([
                         'Ya' => 'Ya',
                         'Tidak' => 'Tidak',
@@ -138,7 +143,7 @@ class DiklatIntelijenTingkatIIResource extends Resource
                 Tables\Columns\TextColumn::make('nip')->label('NIP'),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir'),
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
-                Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat Dasar I'),
+                Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat I'),
                 Tables\Columns\TextColumn::make('riwayat_diklat')->label('Riwayat Diklat'),
                 Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('golongan')->label('Golongan'),
@@ -152,6 +157,7 @@ class DiklatIntelijenTingkatIIResource extends Resource
                     ->formatStateUsing(function (DiklatIntelijenTingkatII $record) {
 
                         $riwayatDiklat = $record->status_riwayat_diklat;
+                        $riwayatDiklatDua = $record->status_riwayat_diklat_dua_lulus;
                         $umur = $record->age;
                         $golongan = $record->golongan;
                         $alasan = [];
@@ -167,13 +173,16 @@ class DiklatIntelijenTingkatIIResource extends Resource
                             'I/b',
                             'I/a',
                         ];
-                        if ($riwayatDiklat == 'Ya' && $umur <= 40 && !in_array($golongan, $notSyaratGolongan)) {
+                        if ($riwayatDiklat == 'Ya' && $riwayatDiklatDua == 'Ya' && $umur <= 40 && !in_array($golongan, $notSyaratGolongan)) {
                             $alasan = [];
                             $status = 'MS';
                             $alasans = '';
                         } else {
                             if ($riwayatDiklat != 'Ya') {
                                 $alasan[] = 'Tidak Lulus Diklat Intelijen Tingkat Dasar 1';
+                            }
+                            if ($riwayatDiklatDua != 'Ya') {
+                                $alasan[] = 'Tidak Lulus Dua Diklat Teknis Intelijen I';
                             }
                             if ($umur > 40) {
                                 $alasan[] = 'Umur lebih dari 40';

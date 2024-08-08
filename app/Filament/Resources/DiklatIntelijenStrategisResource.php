@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\DiklatIntelijenStrategisExporter;
 use App\Filament\Resources\DiklatIntelijenStrategisResource\Pages;
 use App\Filament\Resources\DiklatIntelijenStrategisResource\RelationManagers;
 use App\Models\DiklatIntelijenStrategis;
@@ -96,6 +97,11 @@ class DiklatIntelijenStrategisResource extends Resource
                         'Ya' => 'Ya',
                         'Tidak' => 'Tidak',
                     ]),
+                Select::make('status_riwayat_diklat_dua_lulus')->label('Lulus Dua Diklat Teknis Intelijen II')->required()
+                    ->options([
+                        'Ya' => 'Ya',
+                        'Tidak' => 'Tidak',
+                    ]),
                 TextInput::make('angkatan')->label('Angkatan')->required()
                     ->datalist([
                         'Seno'
@@ -124,7 +130,7 @@ class DiklatIntelijenStrategisResource extends Resource
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(DiklatIntelijenStrategis::class)
+                ->exporter(DiklatIntelijenStrategisExporter::class)
         ])
             ->query(
                 DiklatIntelijenStrategis::query()
@@ -149,6 +155,7 @@ class DiklatIntelijenStrategisResource extends Resource
                     ->formatStateUsing(function (DiklatIntelijenStrategis $record) {
 
                         $riwayatDiklat = $record->status_riwayat_diklat;
+                        $riwayatDiklatDua = $record->status_riwayat_diklat_dua_lulus;
                         $umur = $record->age;
                         $golongan = $record->golongan;
                         $alasan = [];
@@ -166,13 +173,16 @@ class DiklatIntelijenStrategisResource extends Resource
                             'I/b',
                             'I/a',
                         ];
-                        if ($riwayatDiklat == 'Ya' && !in_array($golongan, $notSyaratGolongan)) {
+                        if ($riwayatDiklat == 'Ya' && $riwayatDiklatDua == 'Ya' && !in_array($golongan, $notSyaratGolongan)) {
                             $alasan = [];
                             $status = 'MS';
                             $alasans = '';
                         } else {
                             if ($riwayatDiklat != 'Ya') {
                                 $alasan[] = 'Tidak Lulus Diklat Intelijen Tingkat II';
+                            }
+                            if ($riwayatDiklatDua != 'Ya') {
+                                $alasan[] = 'Tidak Lulus Dua Diklat Teknis Intelijen II';
                             }
             
                             if (in_array($golongan, $notSyaratGolongan)) {

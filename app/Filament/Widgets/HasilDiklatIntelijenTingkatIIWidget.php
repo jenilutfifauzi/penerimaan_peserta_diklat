@@ -36,6 +36,7 @@ class HasilDiklatIntelijenTingkatIIWidget extends BaseWidget
                 DiklatIntelijenTingkatII::query()
                 ->where('kode_pelatihan', 'diklat_intelijen_tingkat_ii')
                 ->where('status_riwayat_diklat', 'YA')
+                ->where('status_riwayat_diklat_dua_lulus', 'YA')
                 ->whereNotIn('golongan', $notSyaratGolongan)
                 ->whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) <= 40')
             )
