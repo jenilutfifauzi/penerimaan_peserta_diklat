@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Exports\TeknisIntelijenIIExporter;
-use App\Filament\Resources\TeknisIntelijenIIResource\Pages;
-use App\Filament\Resources\TeknisIntelijenIIResource\RelationManagers;
-use App\Models\TeknisIntelijenII;
+use App\Filament\Exports\TeknisIntelijenIIIExporter;
+use App\Filament\Resources\TeknisIntelijenIIIResource\Pages;
+use App\Filament\Resources\TeknisIntelijenIIIResource\RelationManagers;
+use App\Models\TeknisIntelijenIII;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
@@ -20,13 +20,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TeknisIntelijenIIResource extends Resource
+class TeknisIntelijenIIIResource extends Resource
 {
-    protected static ?string $model = TeknisIntelijenII::class;
+    protected static ?string $model = TeknisIntelijenIII::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {
@@ -80,7 +80,7 @@ class TeknisIntelijenIIResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nama')->label('Nama')->required(),
-                TextInput::make('kode_pelatihan')->label('Kode Pelatihan')->default('teknis_intelijen_ii')->readOnly(),
+                TextInput::make('kode_pelatihan')->label('Kode Pelatihan')->default('teknis_intelijen_iii')->readOnly(),
                 DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->date()->required(),
                 TextInput::make('nip')->label('NIP')->numeric()->required(),
                 Select::make('pangkat')->label('Pangkat')->required()
@@ -97,7 +97,7 @@ class TeknisIntelijenIIResource extends Resource
                 //         'Ya' => 'Ya',
                 //         'Tidak' => 'Tidak',
                 //     ]),
-                Select::make('status_riwayat_diklat_dua_lulus')->label('Lulus Dua Diklat Teknis Intelijen I')->required()
+                Select::make('status_riwayat_diklat_dua_lulus')->label('Lulus Dua Diklat Teknis Intelijen II')->required()
                     ->options([
                         'Ya' => 'Ya',
                         'Tidak' => 'Tidak',
@@ -130,18 +130,18 @@ class TeknisIntelijenIIResource extends Resource
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(TeknisIntelijenIIExporter::class)
+                ->exporter(TeknisIntelijenIIIExporter::class)
         ])
             ->query(
-                TeknisIntelijenII::query()
-                ->where('kode_pelatihan', 'teknis_intelijen_ii')
+                TeknisIntelijenIII::query()
+                ->where('kode_pelatihan', 'teknis_intelijen_iii')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama'),
                 Tables\Columns\TextColumn::make('nip')->label('NIP'),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir'),
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
-                Tables\Columns\TextColumn::make('status_riwayat_diklat_dua_lulus')->label('Lulus Dua Diklat Teknis Intelijen I'),
+                Tables\Columns\TextColumn::make('status_riwayat_diklat_dua_lulus')->label('Lulus Dua Diklat Teknis Intelijen II'),
                 Tables\Columns\TextColumn::make('riwayat_diklat')->label('Riwayat Diklat'),
                 Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('golongan')->label('Golongan'),
@@ -152,7 +152,7 @@ class TeknisIntelijenIIResource extends Resource
                 Tables\Columns\TextColumn::make('keterangan')->label('Keterangan'),
                 BadgeColumn::make('keterangan_2')
                     ->label('Keterangan 2')
-                    ->formatStateUsing(function (TeknisIntelijenII $record) {
+                    ->formatStateUsing(function (TeknisIntelijenIII $record) {
 
                         $riwayatDiklat = $record->status_riwayat_diklat;
                         $riwayatDiklatDua = $record->status_riwayat_diklat_dua_lulus;
@@ -160,6 +160,8 @@ class TeknisIntelijenIIResource extends Resource
                         $golongan = $record->golongan;
                         $alasan = [];
                         $notSyaratGolongan =[
+                            'III/d',
+                            'III/c',
                             'III/b',
                             'III/a',
                             'II/d',
@@ -171,7 +173,7 @@ class TeknisIntelijenIIResource extends Resource
                             'I/b',
                             'I/a',
                         ];
-                        if ($riwayatDiklatDua == 'Ya' && $umur <=45 && !in_array($golongan, $notSyaratGolongan)) {
+                        if ($riwayatDiklatDua == 'Ya' && $umur <=50 && !in_array($golongan, $notSyaratGolongan)) {
                             $alasan = [];
                             $status = 'MS';
                             $alasans = '';
@@ -180,12 +182,12 @@ class TeknisIntelijenIIResource extends Resource
                                 $alasan[] = 'Tidak Lulus Dua Diklat Teknis Intelijen I';
                             }
 
-                            if ($umur > 45) {
-                                $alasan[] = 'Umur lebih dari 45';
+                            if ($umur > 50) {
+                                $alasan[] = 'Umur lebih dari 50';
                             }
             
                             if (in_array($golongan, $notSyaratGolongan)) {
-                                $alasan[] = 'Golongan dibawah Golongan III/c ';
+                                $alasan[] = 'Golongan dibawah Golongan IV/a ';
                             }
                             $alasans = implode(', ', $alasan);
                             $status = 'TM';
@@ -214,7 +216,7 @@ class TeknisIntelijenIIResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageTeknisIntelijenIIS::route('/'),
+            'index' => Pages\ManageTeknisIntelijenIIIS::route('/'),
         ];
     }
 }
