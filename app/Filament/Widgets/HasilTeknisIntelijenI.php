@@ -2,17 +2,17 @@
 
 namespace App\Filament\Widgets;
 
-use App\Filament\Exports\HasilDiklatIntelijenTingkatIExporter;
-use App\Models\DiklatIntelijenTingkatI;
+use App\Filament\Exports\HasilTeknisIntelijenIExporter;
+use App\Models\TeknisIntelijenI;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Filament\Tables\Actions\ExportAction;
 
-class HasilDiklatIntelijenTingkatIWidget extends BaseWidget
+class HasilTeknisIntelijenI extends BaseWidget
 {
     protected int | string | array $columnSpan = 'full';
-    protected $label = 'Ranking Diklat Intelijen Tingkat Dasar';
+    protected $label = 'Ranking Teknik Intelijen I';
     public function table(Table $table): Table
     {
 
@@ -29,10 +29,10 @@ class HasilDiklatIntelijenTingkatIWidget extends BaseWidget
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(HasilDiklatIntelijenTingkatIExporter::class)
+                ->exporter(HasilTeknisIntelijenIExporter::class)
         ])
             ->query(
-                DiklatIntelijenTingkatI::query()
+                TeknisIntelijenI::query()
                 ->where('kode_pelatihan', 'teknis_intelijen_i')
                 ->where('status_riwayat_diklat', 'YA')
                 ->whereNotIn('golongan', $notSyaratGolongan)

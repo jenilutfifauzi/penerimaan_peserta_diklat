@@ -2,21 +2,23 @@
 
 namespace App\Filament\Widgets;
 
-use App\Filament\Exports\HasilDiklatIntelijenTingkatIExporter;
-use App\Models\DiklatIntelijenTingkatI;
+use App\Filament\Exports\HasilTeknisIntelijenIIExporter;
+use App\Models\TeknisIntelijenII;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Filament\Tables\Actions\ExportAction;
 
-class HasilDiklatIntelijenTingkatIWidget extends BaseWidget
+class HasilTeknisIntelijenII extends BaseWidget
 {
     protected int | string | array $columnSpan = 'full';
-    protected $label = 'Ranking Diklat Intelijen Tingkat Dasar';
+    protected $label = 'Ranking Teknik Intelijen II';
     public function table(Table $table): Table
     {
 
         $notSyaratGolongan =[
+            'III/b',
+            'III/a',
             'II/d',
             'II/c',
             'II/b',
@@ -29,14 +31,14 @@ class HasilDiklatIntelijenTingkatIWidget extends BaseWidget
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(HasilDiklatIntelijenTingkatIExporter::class)
+                ->exporter(HasilTeknisIntelijenIIExporter::class)
         ])
             ->query(
-                DiklatIntelijenTingkatI::query()
-                ->where('kode_pelatihan', 'teknis_intelijen_i')
-                ->where('status_riwayat_diklat', 'YA')
+                TeknisIntelijenII::query()
+                ->where('kode_pelatihan', 'teknis_intelijen_ii')
+                ->where('status_riwayat_diklat_dua_lulus', 'YA')
                 ->whereNotIn('golongan', $notSyaratGolongan)
-                ->whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) <= 40')
+                ->whereRaw('TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) <= 45')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama')->searchable(),
