@@ -20,6 +20,14 @@ class TeknisIntelijenIIExporter extends Exporter
             ->formatStateUsing(function ($state) {
                 return \Carbon\Carbon::parse($state)->format('d-m-Y');
             }),
+            ExportColumn::make('age')->label('Umur')
+            ->formatStateUsing(function ($state) {
+                return $state . ' Tahun';
+            }),
+            ExportColumn::make('status_riwayat_diklat_dua_lulus')->label('Lulus Dua Diklat Teknis Intelijen I')
+            ->formatStateUsing(function ($state) {
+                return $state;
+            }),
             ExportColumn::make('riwayat_diklat')->label('Riwayat Diklat'),
             ExportColumn::make('golongan')->label('Golongan'),
             ExportColumn::make('jabatan')->label('Jabatan'),
@@ -27,6 +35,47 @@ class TeknisIntelijenIIExporter extends Exporter
             ExportColumn::make('surat')->label('Surat'),
             ExportColumn::make('angkatan')->label('Angkatan'),
             ExportColumn::make('keterangan')->label('Keterangan'),
+            ExportColumn::make('keterangan_2')->label('Keterangan 2')
+            ->formatStateUsing(function (TeknisIntelijenII $record) {
+
+                $riwayatDiklat = $record->status_riwayat_diklat;
+                $riwayatDiklatDua = $record->status_riwayat_diklat_dua_lulus;
+                $umur = $record->age;
+                $golongan = $record->golongan;
+                $alasan = [];
+                $notSyaratGolongan =[
+                    'III/b',
+                    'III/a',
+                    'II/d',
+                    'II/c',
+                    'II/b',
+                    'II/a',
+                    'I/d',
+                    'I/c',
+                    'I/b',
+                    'I/a',
+                ];
+                if ($riwayatDiklatDua == 'Ya' && $umur <=45 && !in_array($golongan, $notSyaratGolongan)) {
+                    $alasan = [];
+                    $status = 'MS';
+                    $alasans = '';
+                } else {
+                    if ($riwayatDiklatDua != 'Ya') {
+                        $alasan[] = 'Tidak Lulus Dua Diklat Teknis Intelijen I';
+                    }
+
+                    if ($umur > 45) {
+                        $alasan[] = 'Umur lebih dari 45';
+                    }
+    
+                    if (in_array($golongan, $notSyaratGolongan)) {
+                        $alasan[] = 'Golongan dibawah Golongan III/c ';
+                    }
+                    $alasans = implode(', ', $alasan);
+                    $status = 'TM';
+                }
+                return $status . ' - ' . $alasans;
+            })
         ];
     }
 
