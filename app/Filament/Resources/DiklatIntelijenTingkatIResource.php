@@ -138,7 +138,6 @@ class DiklatIntelijenTingkatIResource extends Resource
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
                 Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat Dasar'),
                 Tables\Columns\TextColumn::make('riwayat_diklat')->label('Riwayat Diklat'),
-                Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('golongan')->label('Golongan'),
                 Tables\Columns\TextColumn::make('jabatan')->label('Jabatan'),
                 Tables\Columns\TextColumn::make('unit')->label('Unit'),

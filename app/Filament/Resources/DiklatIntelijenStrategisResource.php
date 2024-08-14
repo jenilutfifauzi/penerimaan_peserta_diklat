@@ -144,7 +144,6 @@ class DiklatIntelijenStrategisResource extends Resource
                 Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat II'),
                 Tables\Columns\TextColumn::make('status_riwayat_diklat_dua_lulus')->label('Lulus Dua Diklat Teknis Intelijen II'),
                 Tables\Columns\TextColumn::make('riwayat_diklat')->label('Riwayat Diklat'),
-                Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('golongan')->label('Golongan'),
                 Tables\Columns\TextColumn::make('jabatan')->label('Jabatan'),
                 Tables\Columns\TextColumn::make('unit')->label('Unit'),
