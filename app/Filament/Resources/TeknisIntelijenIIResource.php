@@ -24,6 +24,8 @@ class TeknisIntelijenIIResource extends Resource
 {
     protected static ?string $model = TeknisIntelijenII::class;
 
+    protected static ?string $navigationLabel = 'Teknis Intelijen 2';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 6;
