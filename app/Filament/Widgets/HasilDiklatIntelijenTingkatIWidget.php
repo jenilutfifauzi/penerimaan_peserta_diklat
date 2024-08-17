@@ -29,7 +29,7 @@ class HasilDiklatIntelijenTingkatIWidget extends BaseWidget
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(HasilDiklatIntelijenTingkatIExporter::class)
+                ->exporter(HasilDiklatIntelijenTingkatIExporter::class)->label('Export Hasil Diklat Intelijen Tingkat I')
         ])
             ->query(
                 DiklatIntelijenTingkatI::query()
@@ -40,10 +40,10 @@ class HasilDiklatIntelijenTingkatIWidget extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama')->searchable(),
-                Tables\Columns\TextColumn::make('nip')->label('NIP'),
+                Tables\Columns\TextColumn::make('nip')->label('NIP/NRP'),
                 Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('jabatan')->label('Jabatan'),
-                
+
             ]);
     }
 }

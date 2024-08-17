@@ -33,6 +33,6 @@ class ListDiklatIntelijenTingkatDasars extends ListRecords
         return [
             HasilDiklatIntelijenTingkatDasarWidget::make(),
         ];
-        
+
     }
 }

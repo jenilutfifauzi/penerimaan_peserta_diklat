@@ -15,7 +15,7 @@ class HasilDiklatIntelijenTingkatIIExporter extends Exporter
     {
         return [
             ExportColumn::make('nama'),
-            ExportColumn::make('nip'),
+            ExportColumn::make('nip')->label('NIP/NRP'),
             ExportColumn::make('pangkat'),
             ExportColumn::make('jabatan'),
         ];

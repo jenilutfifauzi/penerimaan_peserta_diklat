@@ -15,7 +15,8 @@ class TeknisIntelijenIExporter extends Exporter
     {
         return [
             ExportColumn::make('nama')->label('Nama'),
-            ExportColumn::make('nip')->label('NIP'),
+            ExportColumn::make('nip')->label('NIP/NRP'),
+            ExportColumn::make('pangkat')->label('Pangkat'),
             ExportColumn::make('tanggal_lahir')->label('Tanggal Lahir')
             ->formatStateUsing(function ($state) {
                 return \Carbon\Carbon::parse($state)->format('d-m-Y');
@@ -65,7 +66,7 @@ class TeknisIntelijenIExporter extends Exporter
                     if ($umur > 40) {
                         $alasan[] = 'Umur lebih dari 40';
                     }
-    
+
                     if (in_array($golongan, $notSyaratGolongan)) {
                         $alasan[] = 'Golongan dibawah Golongan III/a ';
                     }

@@ -15,7 +15,7 @@ class KepemimpinanPengawasExporter extends Exporter
     {
         return [
             ExportColumn::make('nama')->label('Nama'),
-            ExportColumn::make('nip')->label('NIP'),
+            ExportColumn::make('nip')->label('NIP/NRP'),
             ExportColumn::make('tanggal_lahir')->label('Tanggal Lahir')
             ->formatStateUsing(function ($state) {
                 return \Carbon\Carbon::parse($state)->format('d-m-Y');
@@ -52,12 +52,12 @@ class KepemimpinanPengawasExporter extends Exporter
                     $status = 'MS';
                     $alasans = '';
                 } else {
-                  
+
 
                     if ($umur > 54) {
                         $alasan[] = 'Umur lebih dari 54';
                     }
-    
+
                     if (in_array($golongan, $notSyaratGolongan)) {
                         $alasan[] = 'Golongan dibawah Golongan III/b ';
                     }

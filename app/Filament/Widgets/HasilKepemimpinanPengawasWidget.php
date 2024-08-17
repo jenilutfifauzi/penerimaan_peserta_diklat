@@ -30,7 +30,7 @@ class HasilKepemimpinanPengawasWidget extends BaseWidget
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(HasilKepemimpinanPengawasExporter::class)
+                ->exporter(HasilKepemimpinanPengawasExporter::class)->label('Export Hasil Kepemimpinan Pengawas')
         ])
             ->query(
                 KepemimpinanPengawas::query()
@@ -40,9 +40,9 @@ class HasilKepemimpinanPengawasWidget extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama')->searchable(),
-                Tables\Columns\TextColumn::make('nip')->label('NIP'),
+                Tables\Columns\TextColumn::make('nip')->label('NIP/NRP'),
                 Tables\Columns\TextColumn::make('jabatan')->label('Jabatan'),
-                
+
             ]);
     }
 }

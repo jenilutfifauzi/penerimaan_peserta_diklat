@@ -84,7 +84,7 @@ class KepemimpinanAdministratorResource extends Resource
                 TextInput::make('nama')->label('Nama')->required(),
                 TextInput::make('kode_pelatihan')->label('Kode Pelatihan')->default('kepemimpinan_administrator')->readOnly(),
                 DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->date()->required(),
-                TextInput::make('nip')->label('NIP')->numeric()->required(),
+                TextInput::make('nip')->label('NIP/NRP')->numeric()->required(),
                 Select::make('golongan')->label('Golongan')->required()
                     ->options($golongans)->searchable(),
                 TextInput::make('jabatan')->label('Jabatan')->required()
@@ -125,7 +125,7 @@ class KepemimpinanAdministratorResource extends Resource
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(KepemimpinanAdministratorExporter::class)
+                ->exporter(KepemimpinanAdministratorExporter::class)->label('Export Kepemimpinan Administrator'),
         ])
             ->query(
                 KepemimpinanAdministrator::query()
@@ -133,7 +133,7 @@ class KepemimpinanAdministratorResource extends Resource
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama'),
-                Tables\Columns\TextColumn::make('nip')->label('NIP'),
+                Tables\Columns\TextColumn::make('nip')->label('NIP/NRP'),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir'),
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
                 Tables\Columns\TextColumn::make('status_pelatihan_kepemimpinan')->label('Lulus Pelatihan Kepemimpinan Pengawas'),
@@ -176,7 +176,7 @@ class KepemimpinanAdministratorResource extends Resource
                             if ($umur > 54) {
                                 $alasan[] = 'Umur lebih dari 54';
                             }
-            
+
                             if (in_array($golongan, $notSyaratGolongan)) {
                                 $alasan[] = 'Golongan dibawah Golongan III/c ';
                             }

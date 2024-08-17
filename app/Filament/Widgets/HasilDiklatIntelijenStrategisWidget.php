@@ -33,7 +33,7 @@ class HasilDiklatIntelijenStrategisWidget extends BaseWidget
         return $table
             ->headerActions([
                 ExportAction::make()
-                    ->exporter(HasilDiklatIntelijenStrategisExporter::class)
+                    ->exporter(HasilDiklatIntelijenStrategisExporter::class)->label('Export Hasil Diklat Intelijen Strategis')
             ])
             ->query(
                 DiklatIntelijenStrategis::query()
@@ -45,7 +45,7 @@ class HasilDiklatIntelijenStrategisWidget extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama')->searchable(),
-                Tables\Columns\TextColumn::make('nip')->label('NIP'),
+                Tables\Columns\TextColumn::make('nip')->label('NIP/NRP'),
                 Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('jabatan')->label('Jabatan'),
 

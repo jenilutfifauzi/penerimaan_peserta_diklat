@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -84,7 +85,7 @@ class DiklatIntelijenTingkatIIResource extends Resource
                 TextInput::make('nama')->label('Nama')->required(),
                 TextInput::make('kode_pelatihan')->label('Kode Pelatihan')->default('diklat_intelijen_tingkat_ii')->readOnly(),
                 DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->date()->required(),
-                TextInput::make('nip')->label('NIP')->numeric()->required(),
+                TextInput::make('nip')->label('NIP/NRP')->numeric()->required(),
                 Select::make('pangkat')->label('Pangkat')->required()
                     ->options($options)->searchable(),
                 Select::make('golongan')->label('Golongan')->required()
@@ -132,7 +133,7 @@ class DiklatIntelijenTingkatIIResource extends Resource
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(DiklatIntelijenTingkatIIExporter::class)
+                ->exporter(DiklatIntelijenTingkatIIExporter::class)->label('Export Diklat Intelijen Tingkat II'),
         ])
             ->query(
                 DiklatIntelijenTingkatII::query()
@@ -140,7 +141,8 @@ class DiklatIntelijenTingkatIIResource extends Resource
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama'),
-                Tables\Columns\TextColumn::make('nip')->label('NIP'),
+                Tables\Columns\TextColumn::make('nip')->label('NIP/NRP'),
+                Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir'),
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
                 Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Lulus Diklat Intelijen Tingkat I'),

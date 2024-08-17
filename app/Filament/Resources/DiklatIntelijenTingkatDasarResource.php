@@ -90,7 +90,7 @@ class DiklatIntelijenTingkatDasarResource extends Resource
                 TextInput::make('nama')->label('Nama')->required(),
                 TextInput::make('kode_pelatihan')->label('Kode Pelatihan')->default('diklat_intelijen_tingkat_dasar')->readOnly(),
                 DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->date()->required(),
-                TextInput::make('nip')->label('NIP')->numeric()->required(),
+                TextInput::make('nip')->label('NIP/NRP')->numeric()->required(),
                 Select::make('pangkat')->label('Pangkat')->required()
                     ->options($options)->searchable(),
                 Select::make('golongan')->label('Golongan')->required()
@@ -141,7 +141,7 @@ class DiklatIntelijenTingkatDasarResource extends Resource
         return $table
             ->headerActions([
                 ExportAction::make()
-                    ->exporter(DiklatIntelijenTingkatDasarExporter::class)
+                    ->exporter(DiklatIntelijenTingkatDasarExporter::class)->label('Export Diklat Intelijen Tingkat Dasar'),
             ])
             ->query(
                 DiklatIntelijenTingkatDasar::query()
@@ -149,7 +149,8 @@ class DiklatIntelijenTingkatDasarResource extends Resource
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama'),
-                Tables\Columns\TextColumn::make('nip')->label('NIP'),
+                Tables\Columns\TextColumn::make('nip')->label('NIP/NRP'),
+                Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir')
                 ->dateTime('d-m-Y'),
 

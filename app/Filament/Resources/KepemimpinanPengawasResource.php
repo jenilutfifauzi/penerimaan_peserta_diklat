@@ -84,7 +84,7 @@ class KepemimpinanPengawasResource extends Resource
                 TextInput::make('nama')->label('Nama')->required(),
                 TextInput::make('kode_pelatihan')->label('Kode Pelatihan')->default('kepemimpinan_pengawas')->readOnly(),
                 DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->date()->required(),
-                TextInput::make('nip')->label('NIP')->numeric()->required(),
+                TextInput::make('nip')->label('NIP/NRP')->numeric()->required(),
                 Select::make('golongan')->label('Golongan')->required()
                     ->options($golongans)->searchable(),
                 TextInput::make('jabatan')->label('Jabatan')->required()
@@ -92,7 +92,7 @@ class KepemimpinanPengawasResource extends Resource
                 TextInput::make('unit')->label('Unit')->required(),
                 TextInput::make('surat')->label('No Surat')->required(),
                 DatePicker::make('tanggal_surat')->label('Tanggal Surat')->required(),
-                
+
                 TextInput::make('angkatan')->label('Angkatan')->required()
                     ->datalist([
                         'Seno'
@@ -120,7 +120,7 @@ class KepemimpinanPengawasResource extends Resource
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(KepemimpinanPengawasExporter::class)
+                ->exporter(KepemimpinanPengawasExporter::class)->label('Export Kepemimpinan Pengawas')
         ])
             ->query(
                 KepemimpinanPengawas::query()
@@ -128,7 +128,7 @@ class KepemimpinanPengawasResource extends Resource
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama'),
-                Tables\Columns\TextColumn::make('nip')->label('NIP'),
+                Tables\Columns\TextColumn::make('nip')->label('NIP/NRP'),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir'),
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
                 Tables\Columns\TextColumn::make('riwayat_diklat')->label('Riwayat Pelatihan'),
@@ -160,12 +160,12 @@ class KepemimpinanPengawasResource extends Resource
                             $status = 'MS';
                             $alasans = '';
                         } else {
-                          
+
 
                             if ($umur > 54) {
                                 $alasan[] = 'Umur lebih dari 54';
                             }
-            
+
                             if (in_array($golongan, $notSyaratGolongan)) {
                                 $alasan[] = 'Golongan dibawah Golongan III/b ';
                             }

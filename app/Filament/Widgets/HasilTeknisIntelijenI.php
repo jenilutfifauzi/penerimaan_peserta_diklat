@@ -29,7 +29,7 @@ class HasilTeknisIntelijenI extends BaseWidget
         return $table
         ->headerActions([
             ExportAction::make()
-                ->exporter(HasilTeknisIntelijenIExporter::class)
+                ->exporter(HasilTeknisIntelijenIExporter::class)->label('Export Hasil Teknis Intelijen I')
         ])
             ->query(
                 TeknisIntelijenI::query()
@@ -40,10 +40,10 @@ class HasilTeknisIntelijenI extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama')->searchable(),
-                Tables\Columns\TextColumn::make('nip')->label('NIP'),
+                Tables\Columns\TextColumn::make('nip')->label('NIP/NRP'),
                 Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('jabatan')->label('Jabatan'),
-                
+
             ]);
     }
 }
