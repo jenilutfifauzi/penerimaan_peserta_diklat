@@ -80,6 +80,27 @@ class DiklatIntelijenTingkatIResource extends Resource
             'IV/c' => 'IV/c',
             'IV/d' => 'IV/d',
         ];
+
+        $pangkatToGolonganMap = [
+            'Juru Muda' => 'I/a',
+            'Juru Muda Tk I' => 'I/b',
+            'Juru' => 'I/c',
+            'Juru Tk I' => 'I/d',
+            'Pengatur Muda' => 'II/a',
+            'Pengatur Muda Tk I' => 'II/b',
+            'Pengatur' => 'II/c',
+            'Pengatur Tk I' => 'II/d',
+            'Penata Muda' => 'III/a',
+            'Penata Muda Tk I' => 'III/b',
+            'Penata' => 'III/c',
+            'Penata Tk I' => 'III/d',
+            'Pembina' => 'IV/a',
+            'Pembina Tk I' => 'IV/b',
+            'Pembina Utama Muda' => 'IV/c',
+            'Pembina Utama Madya' => 'IV/d',
+            'Pembina Utama' => 'IV/e',
+        ];
+
         return $form
             ->schema([
                 TextInput::make('nama')->label('Nama')->required(),
@@ -87,7 +108,15 @@ class DiklatIntelijenTingkatIResource extends Resource
                 DatePicker::make('tanggal_lahir')->label('Tanggal Lahir')->date()->required(),
                 TextInput::make('nip')->label('NIP/NRP')->numeric()->required(),
                 Select::make('pangkat')->label('Pangkat')->required()
-                    ->options($options)->searchable(),
+                ->options($options)->searchable()
+                ->reactive()
+                ->afterStateUpdated(function ($state, callable $set) use ($pangkatToGolonganMap) {
+                    if (isset($pangkatToGolonganMap[$state])) {
+                        $set('golongan', $pangkatToGolonganMap[$state]);
+                    } else {
+                        $set('golongan', null); // Clear the golongan if no mapping found
+                    }
+                }),
                 Select::make('golongan')->label('Golongan')->required()
                     ->options($golongans)->searchable(),
                 TextInput::make('jabatan')->label('Jabatan')->required()
