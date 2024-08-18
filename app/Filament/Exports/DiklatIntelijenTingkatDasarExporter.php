@@ -36,6 +36,7 @@ class DiklatIntelijenTingkatDasarExporter extends Exporter
             ExportColumn::make('jabatan')->label('Jabatan'),
             ExportColumn::make('unit')->label('Unit'),
             ExportColumn::make('surat')->label('Surat'),
+            ExportColumn::make('tanggal_surat')->label('Tanggal Surat'),
             ExportColumn::make('angkatan')->label('Angkatan'),
             ExportColumn::make('keterangan')->label('Keterangan'),
             ExportColumn::make('keterangan')->label('Keterangan'),

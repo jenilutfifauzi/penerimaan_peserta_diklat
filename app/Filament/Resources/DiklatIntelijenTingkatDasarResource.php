@@ -184,6 +184,7 @@ class DiklatIntelijenTingkatDasarResource extends Resource
                 Tables\Columns\TextColumn::make('jabatan')->label('Jabatan'),
                 Tables\Columns\TextColumn::make('unit')->label('Unit'),
                 Tables\Columns\TextColumn::make('surat')->label('Surat'),
+                Tables\Columns\TextColumn::make('tanggal_surat')->label('Tanggal Surat'),
                 Tables\Columns\TextColumn::make('angkatan')->label('Angkatan'),
                 Tables\Columns\TextColumn::make('keterangan')->label('Keterangan'),
                 BadgeColumn::make('keterangan_2')
