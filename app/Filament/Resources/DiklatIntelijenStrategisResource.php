@@ -200,7 +200,7 @@ class DiklatIntelijenStrategisResource extends Resource
                             }
 
                             if (in_array($golongan, $notSyaratGolongan)) {
-                                $alasan[] = 'Golongan dibawah Golongan IV/c ';
+                                $alasan[] = 'Golongan dibawah Golongan IV/a ';
                             }
                             $alasans = implode(', ', $alasan);
                             $status = 'TM';
