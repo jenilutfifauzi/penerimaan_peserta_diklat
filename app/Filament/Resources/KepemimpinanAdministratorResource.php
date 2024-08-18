@@ -14,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Table;
@@ -125,13 +126,20 @@ class KepemimpinanAdministratorResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->headerActions([
-            ExportAction::make()
-                ->exporter(KepemimpinanAdministratorExporter::class)->label('Export Kepemimpinan Administrator'),
-        ])
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(KepemimpinanAdministratorExporter::class)->label('Export Kepemimpinan Administrator'),
+                Action::make('deleteall')
+                    ->label('Delete All')
+                    ->url(fn(): string => route('admin.deleteAll', ['kode_pelatihan' => 'kepemimpinan_administrator']))
+                    ->requiresConfirmation()
+                    ->modalHeading('Delete post')
+                    ->modalDescription('Are you sure you\'d like to delete this post? This cannot be undone.')
+                    ->modalSubmitActionLabel('Yes, delete it')
+            ])
             ->query(
                 KepemimpinanAdministrator::query()
-                ->where('kode_pelatihan', 'kepemimpinan_administrator')
+                    ->where('kode_pelatihan', 'kepemimpinan_administrator')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama'),
@@ -154,7 +162,7 @@ class KepemimpinanAdministratorResource extends Resource
                         $umur = $record->age;
                         $golongan = $record->golongan;
                         $alasan = [];
-                        $notSyaratGolongan =[
+                        $notSyaratGolongan = [
                             'III/b',
                             'III/a',
                             'II/d',
@@ -166,7 +174,7 @@ class KepemimpinanAdministratorResource extends Resource
                             'I/b',
                             'I/a',
                         ];
-                        if ($riwayatPelatihan == 'Ya' && $umur <=54 && !in_array($golongan, $notSyaratGolongan)) {
+                        if ($riwayatPelatihan == 'Ya' && $umur <= 54 && !in_array($golongan, $notSyaratGolongan)) {
                             $alasan = [];
                             $status = 'MS';
                             $alasans = '';

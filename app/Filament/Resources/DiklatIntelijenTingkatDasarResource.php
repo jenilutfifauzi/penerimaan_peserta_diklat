@@ -8,7 +8,7 @@ use App\Filament\Resources\DiklatIntelijenTingkatDasarResource\RelationManagers;
 use App\Models\DiklatIntelijenTingkatDasar;
 use App\Models\PesertaPelatihan;
 use Faker\Provider\ar_EG\Text;
-use Filament\Actions\CreateAction;
+use Filament\Tables\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Request;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Columns\BadgeColumn;
 
@@ -35,6 +36,14 @@ class DiklatIntelijenTingkatDasarResource extends Resource
     protected static ?string $model = DiklatIntelijenTingkatDasar::class;
     protected static ?string $navigationLabel = 'Diklat Intelijen Tingkat Dasar';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected $kode_pelatihan;
+
+    public function __construct($model = null)
+    {
+        parent::__construct($model);
+        $this->kode_pelatihan = 'diklat_intelijen_tingkat_dasar';
+    }
 
     public static function form(Form $form): Form
     {
@@ -123,14 +132,14 @@ class DiklatIntelijenTingkatDasarResource extends Resource
                         'preview',
                         'strike',
                     ]),
-                    TextInput::make('keterangan_2')->label('Keterangan 2')
+                TextInput::make('keterangan_2')->label('Keterangan 2')
                     ->default('-')->readOnly(),
             ]);
     }
 
     public static function table(Table $table): Table
     {
-        $notSyaratGolongan =[
+        $notSyaratGolongan = [
             'II/b',
             'II/a',
             'I/d',
@@ -142,17 +151,31 @@ class DiklatIntelijenTingkatDasarResource extends Resource
             ->headerActions([
                 ExportAction::make()
                     ->exporter(DiklatIntelijenTingkatDasarExporter::class)->label('Export Diklat Intelijen Tingkat Dasar'),
+
+                Action::make('deleteall')
+                    ->label('Delete All')
+                    ->url(fn(): string => route('admin.deleteAll', ['kode_pelatihan' => 'diklat_intelijen_tingkat_dasar']))
+                    ->requiresConfirmation()
+                    ->modalHeading('Delete post')
+                    ->modalDescription('Are you sure you\'d like to delete this post? This cannot be undone.')
+                    ->modalSubmitActionLabel('Yes, delete it')
+                    ->successNotification(
+                        Notification::make()
+                             ->success()
+                             ->title('Data berhasil dihapus')
+                             ->body('The selected data has been deleted.')
+                     )
             ])
             ->query(
                 DiklatIntelijenTingkatDasar::query()
-                ->where('kode_pelatihan', 'diklat_intelijen_tingkat_dasar')
+                    ->where('kode_pelatihan', 'diklat_intelijen_tingkat_dasar')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama'),
                 Tables\Columns\TextColumn::make('nip')->label('NIP/NRP'),
                 Tables\Columns\TextColumn::make('pangkat')->label('Pangkat'),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir')
-                ->dateTime('d-m-Y'),
+                    ->dateTime('d-m-Y'),
 
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
                 Tables\Columns\TextColumn::make('status_riwayat_diklat')->label('Status Riwayat Diklat'),

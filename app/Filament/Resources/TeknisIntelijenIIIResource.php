@@ -14,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Table;
@@ -135,6 +136,13 @@ class TeknisIntelijenIIIResource extends Resource
         ->headerActions([
             ExportAction::make()
                 ->exporter(TeknisIntelijenIIIExporter::class)->label('Export Teknis Intelijen III'),
+                Action::make('deleteall')
+                    ->label('Delete All')
+                    ->url(fn(): string => route('admin.deleteAll', ['kode_pelatihan' => 'teknis_intelijen_iii']))
+                    ->requiresConfirmation()
+                    ->modalHeading('Delete post')
+                    ->modalDescription('Are you sure you\'d like to delete this post? This cannot be undone.')
+                    ->modalSubmitActionLabel('Yes, delete it')
         ])
             ->query(
                 TeknisIntelijenIII::query()

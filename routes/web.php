@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('admin/login');
 });
+
+Route::get('/admin/deleteAll', 'App\Http\Controllers\admin\ActionController@deleteAll')->name('admin.deleteAll');

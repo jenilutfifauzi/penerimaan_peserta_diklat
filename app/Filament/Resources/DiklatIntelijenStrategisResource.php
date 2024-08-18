@@ -6,6 +6,7 @@ use App\Filament\Exports\DiklatIntelijenStrategisExporter;
 use App\Filament\Resources\DiklatIntelijenStrategisResource\Pages;
 use App\Filament\Resources\DiklatIntelijenStrategisResource\RelationManagers;
 use App\Models\DiklatIntelijenStrategis;
+use Filament\Tables\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
@@ -130,13 +131,20 @@ class DiklatIntelijenStrategisResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->headerActions([
-            ExportAction::make()
-                ->exporter(DiklatIntelijenStrategisExporter::class)->label('Export Diklat Intelijen Strategis'),
-        ])
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(DiklatIntelijenStrategisExporter::class)->label('Export Diklat Intelijen Strategis'),
+                Action::make('deleteall')
+                    ->label('Delete All')
+                    ->url(fn(): string => route('admin.deleteAll', ['kode_pelatihan' => 'diklat_intelijen_strategis']))
+                    ->requiresConfirmation()
+                    ->modalHeading('Delete post')
+                    ->modalDescription('Are you sure you\'d like to delete this post? This cannot be undone.')
+                    ->modalSubmitActionLabel('Yes, delete it')
+            ])
             ->query(
                 DiklatIntelijenStrategis::query()
-                ->where('kode_pelatihan', 'diklat_intelijen_strategis')
+                    ->where('kode_pelatihan', 'diklat_intelijen_strategis')
             )
             ->columns([
                 Tables\Columns\TextColumn::make('nama')->label('Nama'),
@@ -162,7 +170,7 @@ class DiklatIntelijenStrategisResource extends Resource
                         $umur = $record->age;
                         $golongan = $record->golongan;
                         $alasan = [];
-                        $notSyaratGolongan =[
+                        $notSyaratGolongan = [
                             'III/d',
                             'III/c',
                             'III/b',
