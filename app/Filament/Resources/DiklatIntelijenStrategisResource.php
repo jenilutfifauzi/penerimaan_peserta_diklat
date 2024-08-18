@@ -24,6 +24,8 @@ class DiklatIntelijenStrategisResource extends Resource
 {
     protected static ?string $model = DiklatIntelijenStrategis::class;
 
+    protected static ?string $pluralModelLabel = 'Diklat Intelijen Strategis';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 4;

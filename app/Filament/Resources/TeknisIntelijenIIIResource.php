@@ -24,6 +24,8 @@ class TeknisIntelijenIIIResource extends Resource
 {
     protected static ?string $model = TeknisIntelijenIII::class;
 
+    protected static ?string $pluralModelLabel = 'Teknis Intelijen III';
+
     protected static ?string $navigationLabel = 'Teknis Intelijen 3';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';

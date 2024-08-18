@@ -27,6 +27,8 @@ class DiklatIntelijenTingkatIIResource extends Resource
 
     protected static ?string $navigationLabel = 'Diklat Intelijen Tingkat II';
 
+    protected static ?string $pluralModelLabel = 'Diklat Intelijen Tingkat II';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 3;

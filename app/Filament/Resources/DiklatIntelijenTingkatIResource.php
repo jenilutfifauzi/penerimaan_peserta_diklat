@@ -26,6 +26,8 @@ class DiklatIntelijenTingkatIResource extends Resource
 
     protected static ?string $navigationLabel = 'Diklat Intelijen Tingkat I';
 
+    protected static ?string $pluralModelLabel = 'Diklat Intelijen Tingkat I';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

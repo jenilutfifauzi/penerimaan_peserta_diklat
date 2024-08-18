@@ -26,6 +26,8 @@ class TeknisIntelijenIIResource extends Resource
 
     protected static ?string $navigationLabel = 'Teknis Intelijen 2';
 
+    protected static ?string $pluralModelLabel = 'Teknis Intelijen II';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 6;

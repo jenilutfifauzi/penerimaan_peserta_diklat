@@ -26,6 +26,8 @@ class KepemimpinanAdministratorResource extends Resource
 
     protected static ?string $navigationLabel = 'Kepemimpinan Administrator';
 
+    protected static ?string $pluralModelLabel = 'Kepemimpinan Administrator';
+
     protected static ?int $navigationSort = 8;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
