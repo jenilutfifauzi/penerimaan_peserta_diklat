@@ -215,19 +215,19 @@ class DiklatIntelijenTingkatIIResource extends Resource
                             'I/b',
                             'I/a',
                         ];
-                        if ($riwayatDiklat == 'Ya' && $riwayatDiklatDua == 'Ya' && $umur <= 40 && !in_array($golongan, $notSyaratGolongan)) {
+                        if ($riwayatDiklat == 'Ya' && $riwayatDiklatDua == 'Ya' && $umur <= 45 && !in_array($golongan, $notSyaratGolongan)) {
                             $alasan = [];
                             $status = 'MS';
                             $alasans = '';
                         } else {
                             if ($riwayatDiklat != 'Ya') {
-                                $alasan[] = 'Tidak Lulus Diklat Intelijen Tingkat Dasar 1';
+                                $alasan[] = 'Tidak Lulus Diklat Intelijen Tingkat 1';
                             }
                             if ($riwayatDiklatDua != 'Ya') {
                                 $alasan[] = 'Tidak Lulus Dua Diklat Teknis Intelijen I';
                             }
-                            if ($umur > 40) {
-                                $alasan[] = 'Umur lebih dari 40';
+                            if ($umur > 45) {
+                                $alasan[] = 'Umur lebih dari 45';
                             }
                             if (in_array($golongan, $notSyaratGolongan)) {
                                 $alasan[] = 'Golongan dibawah Golongan III/c ';

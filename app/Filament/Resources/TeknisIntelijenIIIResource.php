@@ -221,7 +221,7 @@ class TeknisIntelijenIIIResource extends Resource
                             $alasans = '';
                         } else {
                             if ($riwayatDiklatDua != 'Ya') {
-                                $alasan[] = 'Tidak Lulus Dua Diklat Teknis Intelijen I';
+                                $alasan[] = 'Tidak Lulus Dua Diklat Teknis Intelijen II';
                             }
 
                             if ($umur > 50) {
