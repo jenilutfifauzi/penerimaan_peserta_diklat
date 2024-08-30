@@ -146,7 +146,7 @@ class KepemimpinanAdministratorResource extends Resource
                 Tables\Columns\TextColumn::make('nip')->label('NIP/NRP'),
                 Tables\Columns\TextColumn::make('tanggal_lahir')->label('Tanggal Lahir'),
                 Tables\Columns\TextColumn::make('age')->label('Umur'),
-                Tables\Columns\TextColumn::make('status_pelatihan_kepemimpinan')->label('Lulus Pelatihan Kepemimpinan Pengawas'),
+                // Tables\Columns\TextColumn::make('status_pelatihan_kepemimpinan')->label('Lulus Pelatihan Kepemimpinan Pengawas'),
                 Tables\Columns\TextColumn::make('riwayat_diklat')->label('Riwayat Pelatihan'),
                 Tables\Columns\TextColumn::make('golongan')->label('Golongan'),
                 Tables\Columns\TextColumn::make('jabatan')->label('Jabatan'),
